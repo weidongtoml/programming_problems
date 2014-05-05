@@ -81,7 +81,7 @@ typedef bool (*BTreeIsBalancedFunc)(Node*);
 
 int CheckImpl(BTreeIsBalancedFunc func) {
   int num_error = 0;
-  Node nodes[5];
+  Node nodes[6];
   Node* tree = &nodes[0];
   tree->left = tree->right = nullptr;
   if (!func(tree)) {
