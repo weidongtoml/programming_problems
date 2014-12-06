@@ -58,7 +58,7 @@ bool StringHasUniqChar2(const string& str) {
  * StringHasUniqChar3 is another implementation that uses no additional 
  * data structure, and is expected to have O(n*log(n)) time complexity,
  * with worse case of O(n^2) time complexity.
- * But this requires O(n) space in order not to change the origianl string.
+ * But this requires O(n) space in order not to change the original string.
  */
 bool StringHasUniqChar3(const string& str) {
   string str_cpy = str;
