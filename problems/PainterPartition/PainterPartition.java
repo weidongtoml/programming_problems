@@ -44,16 +44,18 @@ import java.util.Scanner;
  *              //  which has the cost of T[0][j] - T[0][j-m].
  *                  max(T[i-1][j-m], T[0][j] - T[0][j-m])
  *            }
- * Runing complexity: O(k * n * n)
+ * Run time complexity: O(k * n * n)
  * Space complexity: O(n)
  *
- * TODO(weidong): come up with a solution using binary search which runs in O(N lg N) time? Prerequisite for this: https://www.topcoder.com/community/data-science/data-science-tutorials/binary-search/
- * See https://www.geeksforgeeks.org/painters-partition-problem-set-2/ for solution
+ * Using Binary Search
+ * ===================
  * The idea here is to use binary search to search for the partition size, which should be
  * between max(B[0...n]) for the case there's n painters and sum(B[0...n]) for the case there's only 1 painter.
  * For each binary step, use the max size to loop through the array to check for the number of painters needed.
  * If the number of painters needed is less than k, then we found a new upper bound, otherwise, we
  * find a new lower bound. Continue doing so until we have terminate the binary search.
+ * Run time complexity: O(n * log sum(B[0...n]))
+ * Space complexity: O(1)
  */
 public class PainterPartition {
     // get mininum partition size using exhaustive search
