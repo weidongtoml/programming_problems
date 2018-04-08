@@ -1,5 +1,7 @@
-import java.util.Optional;
 import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.Iterator;
+import java.util.Optional;
 import java.lang.StringBuilder;
 
 /**
@@ -9,6 +11,11 @@ import java.lang.StringBuilder;
  * (2) root of the tree is always BLACK
  * (3) there are no two adjacent red nodes, i.e. a red node cannot have a red parent or red child
  * (4) every path from root to an empty node has same number of black nodes.
+ *
+ * Reference:
+ * https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
+ * https://www.geeksforgeeks.org/red-black-tree-set-2-insert/
+ * https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/
  */
 public class RBTree<K extends Comparable<K>, V> {
     private Optional<Node> root;
@@ -43,6 +50,10 @@ public class RBTree<K extends Comparable<K>, V> {
      * Runtime complexity is O(log n), i.e. linear to the height of the tree.
      */
     public Optional<V> get(final K key) {
+        return search(key).map(Node::getValue);
+    }
+
+    private Optional<Node> search(final K key) {
         Optional<Node> node = root;
         while (node.isPresent()) {
             final Node p = node.get();
@@ -52,7 +63,7 @@ public class RBTree<K extends Comparable<K>, V> {
             } else if (r > 0) {
                 node = p.getRight();
             } else {
-                return Optional.of(p.getValue());
+                return node;
             }
         }
         return Optional.empty();
@@ -110,7 +121,154 @@ public class RBTree<K extends Comparable<K>, V> {
         System.out.printf("After rebalance: \n%s\n\n", toString());
     }
 
+    /**
+     * Remove the given value associated with the key.
+     * @param key: key to search for
+     */
     public void remove(final K key) {
+        System.out.printf("Before removal of %s:\n%s", key.toString(), toString());
+        Optional<Node> node = search(key);
+        while (node.isPresent()) {
+            Node n = node.get();
+            final int numChildren = n.numChildren();
+            if (numChildren == 0) {
+                // (1) no children --> simply remove
+                //     p            p
+                //     n     -->     
+                //
+                System.out.println("replaceWith empty");
+                replaceWith(node, Optional.empty());
+                break;
+            } else if (numChildren == 1) {
+                // (2) not left child  --> replace with right child
+                //     p                p 
+                //     n      -->       r 
+                //        r           T1  T2 
+                //      T1  T2
+                //
+                // (3) no right child --> replace with left child
+                //      p               p
+                //      n    -->        l
+                //   l               T1   T2
+                // T1 T2
+                //
+                if (n.getLeft().isPresent()) {
+                    System.out.println("replaceWith left");
+                    replaceWith(node, n.getLeft());
+                } else {
+                    System.out.println("replaceWith right");
+                    replaceWith(node, n.getRight());
+                }
+                break;
+            } else {
+                // (4) two children   --> swap the cotent of node with its successor
+                // then attempt to delete successor
+                //        p                        p
+                //        n            -->         s 
+                //     l      r                l       r
+                //  T1  T2  T3  T4          T1  T2   T3  T4
+                final Optional<Node> sucessor = getSuccessor(node);
+                System.out.printf("replaceWith successor: %s\n", sucessor.get().getKey().toString());
+                n.swapWith(sucessor.get());
+                node = sucessor;
+            }
+        }
+
+        System.out.printf("After removal:\n%s\n", toString());
+        // TOOD(weidong): do rebalance
+    }
+
+    /**
+     * @return iterator to loop through keys in the RBTree in increasing order.
+     */
+    public Iterator<K> getIterator() {
+        return new TreeIterator(getMinimum(root), n -> getSuccessor(n));
+    }
+
+    /**
+     * @return iterator to loop through the keys in the RBTree in decreasing order.
+     */
+    public Iterator<K> getReverseIterator() {
+        return new TreeIterator(getMaximum(root), n -> getPredecessor(n));
+    }
+
+    private void replaceWith(final Optional<Node> node, final Optional<Node> replace) {
+        if (!node.isPresent()) {
+            return;
+        }
+        final Node n = node.get();
+        final Optional<Node> parent = n.getParent();
+
+        if (node == root) {
+            root = replace;
+        } else {
+            final Node p = parent.get();
+            if (n.isLeftChild()) {
+                p.setLeft(replace);
+            } else {
+                p.setRight(replace);
+            }
+        }
+        n.setParent(Optional.empty());
+
+        if (replace.isPresent()) {
+            final Node r = replace.get();
+            r.getParent().ifPresent(p -> {
+                if (r.isLeftChild()) {
+                    p.setLeft(Optional.empty());
+                } else {
+                    p.setRight(Optional.empty());
+                }
+            });
+            r.setParent(parent);
+        }
+    }
+
+    /**
+     * @return the successor of the given node
+     */
+    private Optional<Node> getSuccessor(final Optional<Node> node) {
+        if (!node.isPresent()) {
+            return Optional.empty();
+        }
+        final Node n = node.get();
+        if (n.getRight().isPresent()) {
+            return getMinimum(n.getRight());
+        } else {
+            // find the ancestor who is a left child, then the successor would be the parent of this ancestor.
+            //           s
+            //        r       T2
+            //     T1   .
+            //            .
+            //              n
+            //  successor of n is r's parent, s.
+            Optional<Node> r = node;
+            while (r.isPresent() && r.get().isRightChild()) {
+                r = r.flatMap(Node::getParent);
+            }
+            return r.flatMap(Node::getParent);
+        }
+    }
+
+    /**
+     * @return predecessor of the given node
+     *
+     * Note: this is just a mirror of getSuccessor
+     */
+    private Optional<Node> getPredecessor(final Optional<Node> node) {
+        if (!node.isPresent()) {
+            return Optional.empty();
+        }
+        final Node n = node.get();
+        if (n.getLeft().isPresent()) {
+            return getMaximum(n.getLeft());
+        } else {
+            Optional<Node> r = node;
+            while (r.isPresent() && r.get().isLeftChild()) {
+                r = r.flatMap(Node::getParent);
+            }
+            return r.flatMap(Node::getParent);
+        }
     }
 
     /**
@@ -184,6 +342,10 @@ public class RBTree<K extends Comparable<K>, V> {
         // to root node to ensure the properties are satisified.
         while (node.isPresent()) {
             final Node n = node.get();
+            if (n.getColor().equals(Color.BLACK)) { // there's nothing needed to be done here
+                break;
+            }
+
             final Optional<Node> parent = n.getParent();
             // root node is always black
             if (!parent.isPresent()) {
@@ -278,6 +440,9 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    /**
+     * swaps the color for the given 2 nodes if they are different.
+     */
     private void swapColor(final Optional<Node> n1, final Optional<Node> n2) {
         final Color c1 = n1.isPresent() ? n1.get().getColor() : Color.BLACK;
         final Color c2 = n2.isPresent() ? n2.get().getColor() : Color.BLACK;
@@ -346,6 +511,48 @@ public class RBTree<K extends Comparable<K>, V> {
         BLACK
     }
 
+    private Optional<Node> getMinimum(Optional<Node> node) {
+        return getLeafNode(Node::getLeft, node);
+    }
+
+    private Optional<Node> getMaximum(Optional<Node> node) {
+        return getLeafNode(Node::getRight, node);
+    }
+
+    private Optional<Node> getLeafNode(final Function<Node, Optional<Node>> strategy, final Optional<Node> node) {
+        Optional<Node> n = node;
+        while (n.flatMap(strategy).isPresent()) {
+            n = n.flatMap(strategy);
+        }
+        return n;
+    }
+
+    private class TreeIterator implements Iterator<K> {
+        private Optional<Node> node;
+        private Function<Optional<Node>, Optional<Node>> getNext;
+
+        TreeIterator(final Optional<Node> node, final Function<Optional<Node>, Optional<Node>> getNext) {
+            this.node = node;
+            this.getNext = getNext;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node.isPresent();
+        }
+
+        @Override
+        public K next() {
+            final Node n = node.get();
+            node = getNext.apply(node);
+            return n.getKey();
+        }
+
+        @Override
+        public void remove() {
+        } 
+    }
+
     private class Node {
         private K key;
         private V value;
@@ -361,6 +568,17 @@ public class RBTree<K extends Comparable<K>, V> {
             this.color = Color.RED; // newly inserted node gets RED as the color
             left = Optional.empty();
             right = Optional.empty();
+        }
+
+        void swapWith(final Node n) {
+            final K key1 = key;
+            final V value1 = value;
+
+            key = n.key;
+            value = n.value;
+
+            n.key = key1;
+            n.value = value1;
         }
 
         K getKey() {
@@ -403,14 +621,28 @@ public class RBTree<K extends Comparable<K>, V> {
             return parent;
         }
 
-        Optional<Node> getUncle() {
-            return parent.flatMap(Node::getParent).flatMap(g -> {
-                return (g.getLeft() == parent) ? g.getRight() : g.getLeft();
-            });
-        }
-
         void setParent(final Optional<Node> n) {
             parent = n;
+        }
+
+        Optional<Node> getUncle() {
+            return parent.flatMap(Node::getSibling);
+        }
+
+        boolean isLeftChild() {
+            return parent.flatMap(Node::getLeft).filter(n -> n == this).isPresent();
+        }
+
+        boolean isRightChild() {
+            return parent.flatMap(Node::getRight).filter(n -> n == this).isPresent();
+        }
+
+        Optional<Node> getSibling() {
+            return parent.flatMap(isLeftChild() ? Node::getRight : Node::getLeft);
+        }
+
+        int numChildren() {
+            return (left.isPresent() ? 1 : 0) + (right.isPresent() ? 1 : 0);
         }
 
         @Override
@@ -421,6 +653,7 @@ public class RBTree<K extends Comparable<K>, V> {
 
     public static void main(final String[] args) {
         final RBTree<Integer, Character> rbtree = new RBTree();
+        System.out.println("Start insertion:");
         rbtree.set(0, 'a');
         rbtree.set(5, 'b');
         rbtree.set(10, 'c');  // right-right => rotate-left-g
@@ -433,6 +666,7 @@ public class RBTree<K extends Comparable<K>, V> {
         rbtree.set(-9, 'j');  // right-left => rotate-right-p => right-right => rotate-left-g
         rbtree.set(0, 'k');
 
+        System.out.println("Do search:");
         System.out.println(rbtree.get(0).get()); // => 'k'
         System.out.println(rbtree.get(5).get()); // => 'b'
         System.out.println(rbtree.get(10).get()); // => 'c'
@@ -444,8 +678,27 @@ public class RBTree<K extends Comparable<K>, V> {
         System.out.println(rbtree.get(-7).get()); // => 'i'
         System.out.println(rbtree.get(-9).get()); // => 'j'
         System.out.println(rbtree.get(31).isPresent());  // => false
+
+        System.out.println("Iterate through all keys in increasing order:");
+        final Iterator<Integer> iter = rbtree.getIterator();
+        while (iter.hasNext()) {
+            System.out.printf("%d ", iter.next());
+        }
+        System.out.println();
+
+        System.out.println("Iterate through all keys in decreasing order:");
+        final Iterator<Integer> rIter = rbtree.getReverseIterator();
+        while (rIter.hasNext()) {
+            System.out.printf("%d ", rIter.next());
+        }
+        System.out.println();
+
+
+        System.out.println("Start deletion:");
+        rbtree.remove(0);
+        rbtree.remove(-10);
+        rbtree.remove(-9);
+        rbtree.remove(-2);
     }
 }
-
-
 
