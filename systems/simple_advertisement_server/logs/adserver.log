@@ -1,0 +1,67 @@
+2018-05-20 17:54:25,873 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 17:54:25,873 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 17:54:26,091 Loading ad content from path [./ads]
+2018-05-20 17:54:26,148 Loaded add content: 
+None
+.
+2018-05-20 17:54:26,148 Finished loading ad content.
+2018-05-20 17:54:37,107 Unknown API path [/api/get_ad_for_time], '/api/get_ad_for_time'
+2018-05-20 20:59:00,828 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 20:59:00,829 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 20:59:01,003 Loading ad content from path [./ads]
+2018-05-20 20:59:01,033 Loaded add content: 
+None
+.
+2018-05-20 20:59:01,034 Finished loading ad content.
+2018-05-20 21:01:24,316 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:01:24,317 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:01:47,905 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:01:47,905 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:01:50,586 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:01:50,586 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:01:50,706 Loading ad content from path [./ads]
+2018-05-20 21:01:50,731 Loaded add content: 
+None
+.
+2018-05-20 21:01:50,731 Finished loading ad content.
+2018-05-20 21:24:10,504 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:24:10,505 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:24:10,915 Loading ad content from path [./ads]
+2018-05-20 21:24:10,969 Loaded add content: 
+None
+.
+2018-05-20 21:24:10,969 Finished loading ad content.
+2018-05-20 21:27:38,847 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:27:38,847 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:27:38,958 Loading ad content from path [./ads]
+2018-05-20 21:27:38,985 Loaded add content: 
+None
+.
+2018-05-20 21:27:38,985 Finished loading ad content.
+2018-05-20 21:28:58,501 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:28:58,501 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:28:58,638 Loading ad content from path [./ads]
+2018-05-20 21:28:58,665 Loaded add content: 
+None
+.
+2018-05-20 21:28:58,665 Finished loading ad content.
+2018-05-20 21:50:49,144 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:50:49,144 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:50:49,279 Loading ad content from path [./ads]
+2018-05-20 21:50:49,334 Loaded add content: 
+None
+.
+2018-05-20 21:50:49,334 Finished loading ad content.
+2018-05-20 21:51:54,685 Unknown API path [/get_ad], '/get_ad'
+2018-05-20 21:51:55,112 Unknown API path [/favicon.ico], '/favicon.ico'
+2018-05-20 21:51:55,691 Unknown API path [/favicon.ico], '/favicon.ico'
+2018-05-20 21:52:01,050 Unknown API path [/api/get_ad&a=1], '/api/get_ad&a=1'
+2018-05-20 21:53:05,838 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:53:05,838 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:53:09,811 Loading config with working directory: [/Users/weidong/IdeaProjects/mcr/7ae8289d9573175fb599b594efebcab46b80b0c7/v1].
+2018-05-20 21:53:09,811 Finished loading configuration from [./conf//ad_server_conf.json].
+2018-05-20 21:53:09,992 Loading ad content from path [./ads]
+2018-05-20 21:53:10,044 Loaded add content: 
+None
+.
+2018-05-20 21:53:10,044 Finished loading ad content.

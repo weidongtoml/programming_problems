@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "pub_timestamp": 1526689735,
+  "ad_content": [
+    {
+      "id": 1,
+      "content": {
+        "img_url": "img_url_1"
+      },
+      "display_period": {
+        "start": "20180101:00:00:00",
+        "end": "20180102:23:59:59",
+        "time_zone": "UTC"
+      }
+    }, {
+      "id": 2,
+      "content": {
+        "img_url": "img_url_2"
+      },
+      "display_period": {
+        "start": "20180518:00:00:00",
+        "end": "20180719:12:05:01",
+        "time_zone": "UTC"
+      }
+    }, {
+      "id": 3,
+      "content": {
+        "img_url": "img_url_3"
+      },
+      "display_period": {
+        "start": "20180519:00:00:00",
+        "end": "20200101:00:00:00",
+        "time_zone": "UTC"
+      }
+    }, {
+      "id": 4,
+      "content": {
+        "img_url": "img_url_4"
+      },
+      "display_period": {
+        "start": "19970102:18:00:00",
+        "end": "19970102:19:00:00",
+        "time_zone": "Japan"
+      },
+      "comment": "start is 19970102:09:00:00 UTC, end is 19970102:10:00:00 UTC"
+    }
+  ]
+}
